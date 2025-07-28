@@ -60,5 +60,17 @@
 			<button type="submit" class="btn btn-primary">Upload CSV</button>
 		</form>
 	</div>
+	<div style="position: fixed; bottom: 10px; left: 10px; z-index: 1000;">
+	<form th:action="@{/logout}" method="post" style="display:inline;">
+    <button type="submit" style="background-color:red; color:white; border:none; padding:5px 10px;">
+        Logout
+    </button>
+</form>
+<form th:action="@{/}" method="get" style="display:inline;">
+    <button type="submit" style="background-color:green; color:white; border:none; padding:5px 10px;">
+        Home
+    </button>
+</form>
+	</div>
 </body>
 </html>
