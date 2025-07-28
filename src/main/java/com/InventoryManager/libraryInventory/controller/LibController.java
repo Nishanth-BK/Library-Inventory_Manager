@@ -59,6 +59,10 @@ public class LibController {
 		bookService.deleteBookById(id);
 		return "redirect:/books";
 	}
+	@GetMapping("/login")
+	public String login() {
+	    return "login"; 
+	}
 
 	
 	LibController(BookService bookService){
