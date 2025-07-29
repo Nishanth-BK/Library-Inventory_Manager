@@ -45,9 +45,9 @@ To Kill a Mockingbird,Harper Lee,Fiction,3
 
 ##  Sample Credentials
 
-| Username | Password  | Role  |
-|----------|-----------|-------|
-| admin    | admin@22  | USER  |
+| Username | Password  |
+|----------|-----------|
+| admin    | admin@22  |
 
 Configured in `SecurityConfig.java`.
 
