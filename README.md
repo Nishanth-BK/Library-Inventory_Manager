@@ -1,22 +1,22 @@
 
-# 📚 Library Inventory Management System
+# Library Inventory Management System
 
 A web-based application to manage books in a library. Built using Spring Boot, Thymeleaf, MySQL, and Spring Security. Supports CRUD operations and CSV file upload for bulk book entry.
 
 ---
 
-## 🚀 Features
+## Features
 
-- ✅ Add, edit, delete, and view books.
-- 📂 Upload books in bulk via CSV.
-- 🔐 Login system with Spring Security (in-memory user).
-- 📄 Thymeleaf-based views (HTML templates).
-- 💾 Persistent MySQL database (can start with H2 for testing).
-- 🛡️ Routes protected with custom login page.
+-  Add, edit, delete, and view books.
+-  Upload books in bulk via CSV.
+-  Login system with Spring Security (in-memory user).
+-  Thymeleaf-based views (HTML templates).
+-  Persistent MySQL database (can start with H2 for testing).
+-  Routes protected with custom login page.
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - Java 17+
 - Spring Boot (MVC + Data JPA + Security)
@@ -28,7 +28,7 @@ A web-based application to manage books in a library. Built using Spring Boot, T
 
 ---
 
-## 📁 CSV Format
+##  CSV Format
 
 Upload CSV file must follow this structure (without header line):
 
@@ -39,21 +39,21 @@ To Kill a Mockingbird,Harper Lee,Fiction,3
 ...
 ```
 
-> ⚠️ Make sure the header line is **not** included or handle it in code.
+>  Make sure the header line is **not** included or handle it in code.
 
 ---
 
-## 🧪 Sample Credentials
+##  Sample Credentials
 
 | Username | Password  | Role  |
 |----------|-----------|-------|
-| admin    | admin123  | USER  |
+| admin    | admin@22  | USER  |
 
 Configured in `SecurityConfig.java`.
 
 ---
 
-## 🔧 Setup Instructions
+## Setup Instructions
 
 1. **Clone the repository**
 
@@ -86,7 +86,7 @@ spring.thymeleaf.cache=false
 Visit: [http://localhost:8080/login]
 ---
 
-## 🌐 Route Mappings
+## Route Mappings
 
 | Route              | Description               |
 |--------------------|---------------------------|
@@ -100,7 +100,7 @@ Visit: [http://localhost:8080/login]
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 <img width="1919" height="955" alt="Screenshot 2025-07-29 102829" src="https://github.com/user-attachments/assets/dbbfe6c8-1a3c-4e98-afe4-9534bee83481" />
 
@@ -117,7 +117,7 @@ Visit: [http://localhost:8080/login]
 
 ---
 
-## 📦 Project Structure (Simplified)
+## Project Structure (Simplified)
 
 ```
 src
@@ -140,7 +140,7 @@ src
 
 ---
 
-## ✅ To-Do / Improvements
+## To-Do / Improvements
 
 - Add user roles (ADMIN, LIBRARIAN)
 - Handle malformed CSV rows gracefully
