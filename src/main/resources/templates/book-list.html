@@ -60,5 +60,32 @@
 			<button type="submit" class="btn btn-primary">Upload CSV</button>
 		</form>
 	</div>
+	<div style="position: fixed; bottom: 10px; left: 10px; z-index: 1000;">
+	<form th:action="@{/logout}" method="post" style="display:inline;">
+    <button type="submit" style="background-color:red; color:white; border:none; padding:5px 10px;">
+        Logout
+    </button>
+</form>
+<form th:action="@{/}" method="get" style="display:inline;">
+    <button type="submit" style="background-color:green; color:white; border:none; padding:5px 10px;">
+        Home
+    </button>
+</form>
+	</div>
+	<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector('form[enctype="multipart/form-data"]');
+    const fileInput = form.querySelector('input[type="file"]');
+
+    form.addEventListener("submit", function (event) {
+      const fileName = fileInput.value;
+      if (!fileName.toLowerCase().endsWith(".csv")) {
+        alert("Only CSV files are allowed!");
+        event.preventDefault(); // Stop form submission
+      }
+    });
+  });
+</script>
+	
 </body>
 </html>

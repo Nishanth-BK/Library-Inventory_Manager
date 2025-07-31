@@ -3,7 +3,10 @@ package com.InventoryManager.libraryInventory.service;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,63 +19,34 @@ import com.opencsv.bean.CsvToBeanBuilder;
 
 @Service
 public class BookService {
-	
+	//this is for dependency injection
 	BookRepository bookrepo;
-	//create
-	public String addBook(Book book){
-		bookrepo.save(book);
-		return "Book added "+book.getBookName();
+	//creating a Book obj and compares if the bookname already exists
+	public String addBook(Book book) {
+	    String key = book.getBookName().toLowerCase();
+	    if (bookMap.containsKey(key)) {
+	        return "Duplicate book: " + book.getBookName();
+	    }
+	    bookMap.put(key, book);
+	    bookrepo.save(book);
+	    return "Book added: " + book.getBookName();
 	}
-	//delete
+
+
+	//deletes the book(by Id)
 	public void deleteBookById(int id) {
-	    bookrepo.deleteById(id);
+	    Book book = bookrepo.findById(id).orElse(null);
+	    if (book != null) {
+	        bookMap.remove(book.getBookName().toLowerCase());  // ? Remove from memory
+	        bookrepo.deleteById(id);
+	    }
 	}
-	//read
+
+	//returns all the books
 	public List<Book> getAllBooks(){
 		return bookrepo.findAll();
 	}
-	
-	//update
-//	public String updateBook(String name,Book book) {
-//		Book existingBook = bookrepo.findBybookNameIgnoreCase(name);
-//		if(existingBook==null) {
-//			return "Book not found : "+name;
-//		}
-//		existingBook.setAuthor(book.getAuthor());
-//		existingBook.setGenre(book.getGenre());
-//		existingBook.setQuantity(book.getQuantity());
-//		
-//		bookrepo.save(existingBook);
-//		return "Book details updated for "+name +" "+existingBook.getAuthor()+" "
-//				+existingBook.getGenre()+" "+existingBook.getQuantity();
-//	}
-	
-	//CSVParsing
-	public void uploadBooksFromCSV(MultipartFile file) {
-		try(Reader reader = new InputStreamReader(file.getInputStream())){
-			CsvToBean<Book> csvToBean = new CsvToBeanBuilder<Book>(reader)
-					.withType(Book.class)
-					.withIgnoreLeadingWhiteSpace(true)
-					.build();
-			List<Book> books = csvToBean.parse();
-			for(Book book:books) {
-				bookrepo.save(book);
-			}
-		}
-		catch(IOException e) {
-			throw new RuntimeException("CSV Parsing Failed",e);
-		}
-	}
-	
-	public Book getBookById(int id) {
-	    return bookrepo.findById(id)
-	             .orElseThrow(() -> new RuntimeException("Book not found with ID: " + id));
-	}
-	
-	@Autowired
-	public BookService(BookRepository bookrepo) {
-		this.bookrepo = bookrepo;
-	}
+	//updates the existing fields. Finds by Id
 	public void updateBook(Book updatedBook) {
 		Book existingBook = bookrepo.findById(updatedBook.getId()).orElse(null);
 		
@@ -83,5 +57,54 @@ public class BookService {
 			existingBook.setQuantity(updatedBook.getQuantity());
 		}
 		bookrepo.save(existingBook);
+	}	
+	//CSVParsing.
+	public List<String> uploadBooksFromCSV(MultipartFile file) {
+	    List<String> messages = new ArrayList<>();
+	    try (Reader reader = new InputStreamReader(file.getInputStream())) {
+	        CsvToBean<Book> csvToBean = new CsvToBeanBuilder<Book>(reader)
+	                .withType(Book.class)
+	                .withIgnoreLeadingWhiteSpace(true)
+	                .build();
+
+	        List<Book> books = csvToBean.parse();
+
+	        for (Book book : books) {
+	            String key = book.getBookName().toLowerCase();
+
+	            if (!bookMap.containsKey(key)) {
+	                bookMap.put(key, book);
+	                bookrepo.save(book);
+	                messages.add("Added: " + book.getBookName());
+	            } else {
+	                messages.add("Duplicate (skipped): " + book.getBookName());
+	            }
+	        }
+
+	    } catch (IOException e) {
+	        messages.add("CSV Parsing Failed: " + e.getMessage());
+	    }
+	    return messages;
 	}
+	
+	public Book getBookById(int id) {
+	    return bookrepo.findById(id)
+	             .orElseThrow(() -> new RuntimeException("Book not found with ID: " + id));
+	}
+	
+	//for hashmap
+	private Map<String, Book> bookMap = new HashMap<>();
+
+	@Autowired
+	public BookService(BookRepository bookrepo) {
+	    this.bookrepo = bookrepo;
+
+	    // Preload existing books into bookMap
+	    List<Book> existingBooks = bookrepo.findAll();
+	    for (Book book : existingBooks) {
+	        bookMap.put(book.getBookName().toLowerCase(), book);
+	    }
+	}
+
+	
 }
